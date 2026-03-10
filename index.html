@@ -1,65 +1,83 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Ghany AI Studio V2</title>
+
+<title>Ghany AI Studio</title>
 
 <style>
 
 body{
-background:linear-gradient(135deg,#020617,#1e3a8a,#7c3aed);
-color:white;
+margin:0;
 font-family:Arial;
-text-align:center;
-padding:40px;
+background:#0f172a;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px;
+background:#020617;
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
 }
 
 .container{
-max-width:900px;
+max-width:1100px;
 margin:auto;
-background:rgba(255,255,255,0.05);
-padding:30px;
-border-radius:20px;
+padding:60px 20px;
+text-align:center;
 }
 
-input,select{
-width:90%;
-padding:10px;
-margin:10px;
-border-radius:10px;
-border:none;
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.hero p{
+opacity:0.8;
 }
 
 button{
 padding:12px 20px;
-margin:10px;
 border:none;
-border-radius:10px;
+border-radius:8px;
 background:#7c3aed;
 color:white;
+font-size:16px;
 cursor:pointer;
+margin-top:20px;
 }
 
 button:hover{
 background:#9333ea;
 }
 
-.result{
-margin-top:20px;
-background:black;
-padding:20px;
-border-radius:10px;
-white-space:pre-line;
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:40px;
 }
 
-.library{
-margin-top:20px;
-background:#111;
-padding:15px;
-border-radius:10px;
+.card{
+background:#020617;
+border:1px solid #1e293b;
+padding:25px;
+border-radius:12px;
+}
+
+.steps{
+margin-top:50px;
 }
 
 footer{
-margin-top:40px;
+text-align:center;
+padding:40px;
 opacity:0.7;
 }
 
@@ -69,194 +87,89 @@ opacity:0.7;
 
 <body>
 
-<h1>Ghany AI Studio V2</h1>
-<p>Cinematic AI Video Prompt Generator</p>
+<nav>
+
+<div class="logo">Ghany AI Studio</div>
+
+<div>AI Video Prompt Tools</div>
+
+</nav>
+
+
+<div class="container hero">
+
+<h1>Create Cinematic AI Video Prompts</h1>
+
+<p>Generate super realistic prompts for AI video models in seconds.</p>
+
+<a href="tools.html">
+<button>Open AI Tools</button>
+</a>
+
+</div>
+
 
 <div class="container">
 
-<h3>Film Prompt Generator</h3>
+<h2>Powerful AI Features</h2>
 
-<input id="title" placeholder="Judul cerita">
+<div class="features">
 
-<input id="character" placeholder="Karakter utama">
+<div class="card">
+<h3>AI Prompt Generator</h3>
+<p>Create cinematic prompts for AI videos instantly.</p>
+</div>
 
-<input id="location" placeholder="Lokasi">
+<div class="card">
+<h3>Scene Story Builder</h3>
+<p>Generate structured scenes for cinematic storytelling.</p>
+</div>
 
-<select id="scene">
-<option value="3">3 Scene</option>
-<option value="4">4 Scene</option>
-<option value="5">5 Scene</option>
-<option value="6">6 Scene</option>
-</select>
-
-<select id="duration">
-<option value="8">Durasi 8 detik</option>
-<option value="10">Durasi 10 detik</option>
-<option value="15">Durasi 15 detik</option>
-</select>
-
-<button onclick="generateFilm()">Generate Film Prompt</button>
-
-
-<h3>Storyboard Generator</h3>
-
-<button onclick="generateStoryboard()">Generate Storyboard</button>
-
-
+<div class="card">
 <h3>Image Reference</h3>
+<p>Upload images to guide your visual prompts.</p>
+</div>
 
-<input type="file" id="imageUpload">
-
-<p>Upload gambar referensi untuk inspirasi visual</p>
-
-
-<h3>Image Prompt Generator</h3>
-
-<input id="object" placeholder="Object / Character">
-
-<input id="environment" placeholder="Environment">
-
-<input id="lighting" placeholder="Lighting">
-
-<button onclick="generateImage()">Generate Image Prompt</button>
-
-
-<div class="result" id="result"></div>
-
-<button onclick="downloadPrompt()">Download Prompt</button>
-
-
-<div class="library">
-
-<h3>Prompt Library</h3>
-
-<p>Cinematic travel scene</p>
-<p>Fantasy movie opening</p>
-<p>Comedy dialogue scene</p>
-<p>Documentary style video</p>
+<div class="card">
+<h3>Prompt Marketplace</h3>
+<p>Save and share prompts with other creators.</p>
+</div>
 
 </div>
+
+</div>
+
+
+<div class="container steps">
+
+<h2>How It Works</h2>
+
+<p>1️⃣ Enter your video idea</p>
+<p>2️⃣ Generate cinematic prompts</p>
+<p>3️⃣ Use prompts in AI video tools</p>
+
+</div>
+
+
+<div class="container">
+
+<h2>Built for AI Creators</h2>
+
+<p>Ghany AI Studio helps creators generate realistic prompts for AI video models like Veo and Kling.</p>
+
+<a href="tools.html">
+<button>Start Creating</button>
+</a>
 
 </div>
 
 
 <footer>
 
-<p>© 2026 Ghany Media</p>
-<p>All Rights Reserved</p>
+© 2026 Ghany Media
 
 </footer>
 
-
-<script>
-
-function generateFilm(){
-
-let title=document.getElementById("title").value
-let character=document.getElementById("character").value
-let location=document.getElementById("location").value
-let scene=document.getElementById("scene").value
-let duration=document.getElementById("duration").value
-
-let output=""
-
-for(let i=1;i<=scene;i++){
-
-output+=`Scene ${i}
-
-${character} in ${location},
-scene from story "${title}",
-
-Superrealistic
-Natural human movement
-word lighting
-Hight detail facial expresif
-cinematic camera movement
-
-duration ${duration} seconds
-
-`
-
-}
-
-document.getElementById("result").innerText=output
-
-}
-
-
-function generateStoryboard(){
-
-let storyboard=`
-
-Storyboard
-
-Scene 1
-Opening cinematic environment
-
-Scene 2
-Character introduction
-
-Scene 3
-Conflict begins
-
-Scene 4
-Action or dialogue moment
-
-Scene 5
-Climax scene
-
-Scene 6
-Ending cinematic shot
-
-`
-
-document.getElementById("result").innerText=storyboard
-
-}
-
-
-function generateImage(){
-
-let obj=document.getElementById("object").value
-let env=document.getElementById("environment").value
-let light=document.getElementById("lighting").value
-
-let prompt=`
-
-Image Reference Prompt
-
-${obj} in ${env}
-
-${light} lighting
-
-cinematic composition
-ultra realistic
-8k cinematic photo
-
-`
-
-document.getElementById("result").innerText=prompt
-
-}
-
-
-function downloadPrompt(){
-
-let text=document.getElementById("result").innerText
-
-let blob=new Blob([text],{type:"text/plain"})
-
-let link=document.createElement("a")
-
-link.href=URL.createObjectURL(blob)
-
-link.download="ghany-ai-prompt.txt"
-
-link.click()
-
-}
-
-</script>
-
 </body>
-    </html>
+
+</html>
