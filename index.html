@@ -1,73 +1,45 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
 
-<title>Ghany AI Studio</title>
+<title>Ghany AI Studio V8</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#0f172a;
+background:#020617;
 color:white;
 }
 
 nav{
+background:#020617;
+padding:15px;
 display:flex;
 justify-content:space-between;
-padding:20px;
-background:#020617;
 border-bottom:1px solid #1e293b;
 }
 
 .logo{
-font-size:20px;
 font-weight:bold;
+font-size:18px;
 }
 
 .container{
 max-width:1100px;
 margin:auto;
-padding:60px 20px;
-}
-
-.hero{
-text-align:center;
-}
-
-.hero h1{
-font-size:42px;
-}
-
-button{
-padding:10px 20px;
-border:none;
-border-radius:8px;
-background:#7c3aed;
-color:white;
-cursor:pointer;
-margin-top:10px;
-}
-
-button:hover{
-background:#9333ea;
-}
-
-.features{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-top:40px;
+padding:40px;
 }
 
 .card{
 background:#020617;
 border:1px solid #1e293b;
-padding:25px;
 border-radius:12px;
-margin-top:20px;
+padding:20px;
+margin-bottom:25px;
 }
 
 input,select{
@@ -76,6 +48,19 @@ padding:10px;
 margin:10px 0;
 border-radius:8px;
 border:none;
+}
+
+button{
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#7c3aed;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#9333ea;
 }
 
 .result{
@@ -87,25 +72,29 @@ border-radius:10px;
 white-space:pre-line;
 }
 
-.market{
-margin-top:10px;
-}
-
-.item{
+.prompt{
 padding:10px;
 border-bottom:1px solid #1e293b;
+cursor:pointer;
+}
+
+.prompt:hover{
+background:#1e293b;
 }
 
 img{
 max-width:200px;
-margin-top:10px;
 border-radius:10px;
+margin-top:10px;
 }
 
-footer{
-text-align:center;
-padding:30px;
-opacity:0.6;
+.library p{
+cursor:pointer;
+padding:6px;
+}
+
+.library p:hover{
+background:#1e293b;
 }
 
 </style>
@@ -116,68 +105,25 @@ opacity:0.6;
 
 <nav>
 
-<div class="logo">Ghany AI Studio</div>
+<div class="logo">Ghany AI Studio V8</div>
 
-<div>AI Video Prompt Tools</div>
+<div>AI Prompt Platform</div>
 
 </nav>
 
 
-<div class="container hero">
-
-<h1>Create Cinematic AI Video Prompts</h1>
-
-<p>Generate super realistic prompts for AI video tools.</p>
-
-<a href="#tools">
-<button>Start Creating</button>
-</a>
-
-</div>
-
-
 <div class="container">
 
-<h2>Features</h2>
-
-<div class="features">
 
 <div class="card">
-<h3>Prompt Generator</h3>
-<p>Create cinematic prompts instantly.</p>
-</div>
-
-<div class="card">
-<h3>Scene Builder</h3>
-<p>Generate structured story scenes.</p>
-</div>
-
-<div class="card">
-<h3>Image Reference</h3>
-<p>Upload visual reference images.</p>
-</div>
-
-<div class="card">
-<h3>Prompt Marketplace</h3>
-<p>Save and share prompts.</p>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="container" id="tools">
 
 <h2>AI Video Prompt Generator</h2>
 
-<div class="card">
+<input id="idea" placeholder="Ide video">
 
-<input id="idea" placeholder="Video idea">
+<input id="character" placeholder="Karakter utama">
 
-<input id="character" placeholder="Main character">
-
-<input id="location" placeholder="Location">
+<input id="location" placeholder="Lokasi">
 
 <select id="mode">
 
@@ -185,7 +131,7 @@ opacity:0.6;
 <option value="tiktok">TikTok Viral</option>
 <option value="asmr">ASMR</option>
 <option value="documentary">Documentary</option>
-<option value="comedy">Comedy</option>
+<option value="animation">Animation</option>
 
 </select>
 
@@ -197,29 +143,14 @@ opacity:0.6;
 
 </select>
 
-<button onclick="generatePrompt()">Generate Prompt</button>
+<button onclick="generateStory()">Generate Story + Prompt</button>
 
 </div>
 
 
 <div class="card">
 
-<h3>Generated Prompt</h3>
-
-<div id="result" class="result"></div>
-
-<button onclick="copyPrompt()">Copy</button>
-
-<button onclick="downloadPrompt()">Download</button>
-
-<button onclick="publishPrompt()">Publish</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>Image Reference</h3>
+<h3>Upload Image Reference</h3>
 
 <input type="file" id="imgUpload" onchange="previewImage()">
 
@@ -230,26 +161,36 @@ opacity:0.6;
 
 <div class="card">
 
-<h3>Prompt Marketplace</h3>
+<h3>Generated Result</h3>
 
-<div id="market" class="market"></div>
+<div id="result"></div>
+
+<button onclick="savePrompt()">Save Prompt</button>
+
+</div>
+
+
+<div class="card library">
+
+<h3>Prompt Library</h3>
+
+<p onclick="useIdea(this)">Kucing menjadi chef di restoran mewah</p>
+
+<p onclick="useIdea(this)">Petualang menemukan kota tersembunyi di hutan</p>
+
+<p onclick="useIdea(this)">Drone cinematic menjelajah kota cyberpunk</p>
+
+<p onclick="useIdea(this)">Orang utan menjadi vlogger di hutan</p>
 
 </div>
 
 
 </div>
-
-
-<footer>
-
-© 2026 Ghany Media
-
-</footer>
 
 
 <script>
 
-function generatePrompt(){
+function generateStory(){
 
 let idea=document.getElementById("idea").value
 let character=document.getElementById("character").value
@@ -257,7 +198,8 @@ let location=document.getElementById("location").value
 let mode=document.getElementById("mode").value
 let scene=document.getElementById("scene").value
 
-let text=`Story Idea
+let story=`Story Idea
+
 ${idea}
 
 Character
@@ -269,77 +211,28 @@ ${location}
 Mode
 ${mode}
 
-Scene Structure
-${scene} scenes
+`
+
+for(let i=1;i<=scene;i++){
+
+story+=`
+
+Scene ${i}
 
 Superrealistic
 Natural human movement
 word lighting
 Hight detail facial expresif
 cinematic film look
+
 `
 
-document.getElementById("result").innerText=text
+}
+
+document.getElementById("result").innerText=story
 
 }
 
-function copyPrompt(){
-
-let text=document.getElementById("result").innerText
-
-navigator.clipboard.writeText(text)
-
-alert("Prompt copied")
-
-}
-
-function downloadPrompt(){
-
-let text=document.getElementById("result").innerText
-
-let blob=new Blob([text],{type:"text/plain"})
-
-let link=document.createElement("a")
-
-link.href=URL.createObjectURL(blob)
-
-link.download="ghany-ai-prompt.txt"
-
-link.click()
-
-}
-
-function publishPrompt(){
-
-let text=document.getElementById("result").innerText
-
-let market=JSON.parse(localStorage.getItem("market"))||[]
-
-market.push(text)
-
-localStorage.setItem("market",JSON.stringify(market))
-
-loadMarket()
-
-}
-
-function loadMarket(){
-
-let market=JSON.parse(localStorage.getItem("market"))||[]
-
-let html=""
-
-market.forEach(p=>{
-
-html+=`<div class="item">${p}</div>`
-
-})
-
-document.getElementById("market").innerHTML=html
-
-}
-
-loadMarket()
 
 function previewImage(){
 
@@ -357,8 +250,26 @@ reader.readAsDataURL(file)
 
 }
 
+
+function useIdea(el){
+
+document.getElementById("idea").value=el.innerText
+
+}
+
+
+function savePrompt(){
+
+let text=document.getElementById("result").innerText
+
+localStorage.setItem("ghanyPrompt",text)
+
+alert("Prompt saved")
+
+}
+
 </script>
 
-</body>
 
+</body>
   </html>
