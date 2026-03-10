@@ -1,275 +1,122 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html>
-
+<!DOCTYPE html><html lang="en">
 <head>
-
-<title>Ghany AI Studio V8</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghany Media Tools V3 - AI Content & Video Factory</title>
 <style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#020617;
-color:white;
-}
-
-nav{
-background:#020617;
-padding:15px;
-display:flex;
-justify-content:space-between;
-border-bottom:1px solid #1e293b;
-}
-
-.logo{
-font-weight:bold;
-font-size:18px;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:40px;
-}
-
-.card{
-background:#020617;
-border:1px solid #1e293b;
-border-radius:12px;
-padding:20px;
-margin-bottom:25px;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:8px;
-border:none;
-}
-
-button{
-padding:10px 18px;
-border:none;
-border-radius:8px;
-background:#7c3aed;
-color:white;
-cursor:pointer;
-}
-
-button:hover{
-background:#9333ea;
-}
-
-.result{
-margin-top:15px;
-background:#020617;
-border:1px solid #1e293b;
-padding:15px;
-border-radius:10px;
-white-space:pre-line;
-}
-
-.prompt{
-padding:10px;
-border-bottom:1px solid #1e293b;
-cursor:pointer;
-}
-
-.prompt:hover{
-background:#1e293b;
-}
-
-img{
-max-width:200px;
-border-radius:10px;
-margin-top:10px;
-}
-
-.library p{
-cursor:pointer;
-padding:6px;
-}
-
-.library p:hover{
-background:#1e293b;
-}
-
+body{font-family:Arial,Helvetica,sans-serif;background:#020617;color:white;margin:0;padding:20px}
+h1{text-align:center;margin-bottom:4px}
+p.subtitle{text-align:center;opacity:.85;margin-top:0}
+.container{max-width:1300px;margin:auto}
+.top{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:15px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}
+.box{background:#0f172a;border-radius:12px;padding:10px;text-align:center;border:1px solid #1e293b}
+.box img{width:100%;height:100px;object-fit:cover;border-radius:6px;margin-top:6px}
+.box textarea{width:100%;margin-top:6px;height:55px;border-radius:6px;border:none;padding:6px}
+.controls{text-align:center;margin-top:18px}
+button{background:#22c55e;border:none;padding:11px 16px;border-radius:8px;color:white;font-weight:bold;cursor:pointer;margin:4px}
+button.secondary{background:#3b82f6}
+button.orange{background:#f97316}
+button.dark{background:#475569}
+button:hover{opacity:.9}
+textarea#output{width:100%;height:230px;margin-top:18px;border-radius:10px;border:none;padding:10px}
+input,select{padding:8px;border-radius:6px;border:none;margin:4px}
+.section{margin-top:15px}
+.footer{text-align:center;margin-top:35px;opacity:.6;font-size:13px}
+.badge{background:#22c55e;padding:3px 8px;border-radius:6px;font-size:12px;margin-left:6px}
 </style>
-
 </head>
-
 <body>
-
-<nav>
-
-<div class="logo">Ghany AI Studio V8</div>
-
-<div>AI Prompt Platform</div>
-
-</nav>
-
-
-<div class="container">
-
-
-<div class="card">
-
-<h2>AI Video Prompt Generator</h2>
-
-<input id="idea" placeholder="Ide video">
-
-<input id="character" placeholder="Karakter utama">
-
-<input id="location" placeholder="Lokasi">
-
-<select id="mode">
-
-<option value="cinematic">Cinematic Film</option>
-<option value="tiktok">TikTok Viral</option>
-<option value="asmr">ASMR</option>
-<option value="documentary">Documentary</option>
-<option value="animation">Animation</option>
-
+<div class="container"><h1>Ghany Media Tools V3 <span class="badge">AI Content Factory</span></h1>
+<p class="subtitle">Create Viral Hooks, Affiliate Scripts, and 10‑Scene AI Videos</p><div class="top"><div class="section">
+<b>Video Settings</b><br>
+<select id="model">
+<option value="veo">Google Veo</option>
+<option value="kling">Kling AI</option>
+<option value="sora">OpenAI Sora</option>
+</select><select id="duration">
+<option value="8">8 Seconds</option>
+<option value="10">10 Seconds</option>
+<option value="15">15 Seconds</option>
 </select>
+</div><div class="section">
+<b>Content Topic</b><br>
+<input type="text" id="topic" placeholder="contoh: kisah lucu abu nawas">
+<input type="text" id="product" placeholder="produk affiliate (opsional)">
+</div><div class="section">
+<b>Viral Hook Generator</b><br>
+<button class="orange" onclick="generateHooks()">Generate 5 Hooks</button>
+<textarea id="hooks" style="width:100%;height:90px;border-radius:8px;border:none;margin-top:8px"></textarea>
+</div><div class="section">
+<b>Auto Story Generator</b><br>
+<button onclick="autoStory()">Create 10 Scene Story</button>
+</div></div><div class="grid" id="imageGrid"></div><div class="controls">
+<button onclick="generatePrompt()">Generate Video Prompts</button>
+<button class="secondary" onclick="downloadTXT()">Download TXT</button>
+<button class="dark" onclick="downloadJSON()">Download JSON</button>
+</div><textarea id="output" placeholder="Generated prompts, hooks, and scripts will appear here..."></textarea><div class="footer">© 2026 Ghany Media Tools V3 – AI Content Factory. All Rights Reserved.</div>
+</div><script>
+const grid=document.getElementById('imageGrid');
 
-<select id="scene">
+for(let i=1;i<=10;i++){
+let div=document.createElement('div');
+div.className='box';
 
-<option value="3">3 Scene</option>
-<option value="5">5 Scene</option>
-<option value="7">7 Scene</option>
+div.innerHTML=`
+<label><b>Scene ${i}</b></label>
+<input type="file" accept="image/*" onchange="previewImage(event,${i})">
+<img id="preview${i}" style="display:none">
+<textarea id="dialog${i}" placeholder="dialog karakter..."></textarea>`;
 
-</select>
+grid.appendChild(div); }
 
-<button onclick="generateStory()">Generate Story + Prompt</button>
+function previewImage(event,i){ const img=document.getElementById('preview'+i); img.src=URL.createObjectURL(event.target.files[0]); img.style.display='block'; }
 
-</div>
+function generateHooks(){ let topic=document.getElementById('topic').value||"cerita menarik"; let product=document.getElementById('product').value;
 
+let hooks=[ "Kamu tidak akan percaya apa yang terjadi dalam cerita ini...", "Banyak orang tidak tahu kisah ini...", "Cerita ini bikin orang tercengang!", "Apa yang terjadi selanjutnya benar-benar di luar dugaan...", "Ini alasan kenapa cerita ini viral di internet..." ];
 
-<div class="card">
+let result="";
 
-<h3>Upload Image Reference</h3>
+hooks.forEach((h,i)=>{ result+=Hook ${i+1}: ${h} (${topic}${product?" + " + product:""})\n; });
 
-<input type="file" id="imgUpload" onchange="previewImage()">
+document.getElementById('hooks').value=result; }
 
-<div id="imgPreview"></div>
+function autoStory(){ let topic=document.getElementById('topic').value||"sebuah cerita";
 
-</div>
+for(let i=1;i<=10;i++){ let dialog=document.getElementById('dialog'+i);
 
+dialog.value=Bagian ${i} dari cerita tentang ${topic}.; } }
 
-<div class="card">
+function generatePrompt(){ let model=document.getElementById('model').value; let duration=document.getElementById('duration').value; let prompt="";
 
-<h3>Generated Result</h3>
+for(let i=1;i<=10;i++){ let img=document.getElementById('preview'+i); let dialog=document.getElementById('dialog'+i).value;
 
-<div id="result"></div>
+if(img.src && img.style.display==='block'){
 
-<button onclick="savePrompt()">Save Prompt</button>
+let base=Scene ${i}: ultra realistic cinematic video, natural human movement, detailed environment, ${duration} seconds, vertical 9:16.;
 
-</div>
+if(model==='kling'){ base=Scene ${i}: cinematic realism, expressive acting, natural lighting, ${duration}s vertical video.; }
 
+if(model==='sora'){ base=Scene ${i}: photorealistic cinematic shot, realistic motion, ${duration} second vertical clip.; }
 
-<div class="card library">
+if(dialog.trim()!=""){ base+= Character says in Indonesian: \"${dialog}\".; }
 
-<h3>Prompt Library</h3>
+prompt+=base+"\n\n"; } }
 
-<p onclick="useIdea(this)">Kucing menjadi chef di restoran mewah</p>
+document.getElementById('output').value=prompt; }
 
-<p onclick="useIdea(this)">Petualang menemukan kota tersembunyi di hutan</p>
+function downloadTXT(){ let text=document.getElementById('output').value; let blob=new Blob([text],{type:'text/plain'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="ghany_media_ai_content.txt";
 
-<p onclick="useIdea(this)">Drone cinematic menjelajah kota cyberpunk</p>
+a.click(); }
 
-<p onclick="useIdea(this)">Orang utan menjadi vlogger di hutan</p>
+function downloadJSON(){ let scenes=[];
 
-</div>
+for(let i=1;i<=10;i++){ let dialog=document.getElementById('dialog'+i).value; if(dialog!=""){ scenes.push({scene:i,dialog:dialog}); } }
 
+let blob=new Blob([JSON.stringify(scenes,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="ghany_media_project.json";
 
-</div>
-
-
-<script>
-
-function generateStory(){
-
-let idea=document.getElementById("idea").value
-let character=document.getElementById("character").value
-let location=document.getElementById("location").value
-let mode=document.getElementById("mode").value
-let scene=document.getElementById("scene").value
-
-let story=`Story Idea
-
-${idea}
-
-Character
-${character}
-
-Location
-${location}
-
-Mode
-${mode}
-
-`
-
-for(let i=1;i<=scene;i++){
-
-story+=`
-
-Scene ${i}
-
-Superrealistic
-Natural human movement
-word lighting
-Hight detail facial expresif
-cinematic film look
-
-`
-
-}
-
-document.getElementById("result").innerText=story
-
-}
-
-
-function previewImage(){
-
-let file=document.getElementById("imgUpload").files[0]
-
-let reader=new FileReader()
-
-reader.onload=function(){
-
-document.getElementById("imgPreview").innerHTML="<img src='"+reader.result+"'>"
-
-}
-
-reader.readAsDataURL(file)
-
-}
-
-
-function useIdea(el){
-
-document.getElementById("idea").value=el.innerText
-
-}
-
-
-function savePrompt(){
-
-let text=document.getElementById("result").innerText
-
-localStorage.setItem("ghanyPrompt",text)
-
-alert("Prompt saved")
-
-}
-
-</script>
-
+a.click(); } </script>
 
 </body>
-  </html>
+</html>
