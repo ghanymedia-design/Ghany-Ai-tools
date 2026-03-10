@@ -1,123 +1,533 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ghany Media Tools V3 - AI Content & Video Factory</title>
-<style>
-body{font-family:Arial,Helvetica,sans-serif;background:#020617;color:white;margin:0;padding:20px}
-h1{text-align:center;margin-bottom:4px}
-p.subtitle{text-align:center;opacity:.85;margin-top:0}
-.container{max-width:1300px;margin:auto}
-.top{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:15px;margin-bottom:20px}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}
-.box{background:#0f172a;border-radius:12px;padding:10px;text-align:center;border:1px solid #1e293b}
-.box img{width:100%;height:100px;object-fit:cover;border-radius:6px;margin-top:6px}
-.box textarea{width:100%;margin-top:6px;height:55px;border-radius:6px;border:none;padding:6px}
-.controls{text-align:center;margin-top:18px}
-button{background:#22c55e;border:none;padding:11px 16px;border-radius:8px;color:white;font-weight:bold;cursor:pointer;margin:4px}
-button.secondary{background:#3b82f6}
-button.orange{background:#f97316}
-button.dark{background:#475569}
-button:hover{opacity:.9}
-textarea#output{width:100%;height:230px;margin-top:18px;border-radius:10px;border:none;padding:10px}
-input,select{padding:8px;border-radius:6px;border:none;margin:4px}
-.section{margin-top:15px}
-.footer{text-align:center;margin-top:35px;opacity:.6;font-size:13px}
-.badge{background:#22c55e;padding:3px 8px;border-radius:6px;font-size:12px;margin-left:6px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghany Media AI Tools - Ultimate Video Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab-active {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            color: white;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        input, textarea, select {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            outline: none !important;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+    </style>
 </head>
-  <script src="script.js"></script>
-<body>
-<div class="container"><h1>Ghany Media Tools V3 <span class="badge">AI Content Factory</span></h1>
-<p class="subtitle">Create Viral Hooks, Affiliate Scripts, and 10‑Scene AI Videos</p><div class="top"><div class="section">
-<b>Video Settings</b><br>
-<select id="model">
-<option value="veo">Google Veo</option>
-<option value="kling">Kling AI</option>
-<option value="sora">OpenAI Sora</option>
-</select><select id="duration">
-<option value="8">8 Seconds</option>
-<option value="10">10 Seconds</option>
-<option value="15">15 Seconds</option>
-</select>
-</div><div class="section">
-<b>Content Topic</b><br>
-<input type="text" id="topic" placeholder="contoh: kisah lucu abu nawas">
-<input type="text" id="product" placeholder="produk affiliate (opsional)">
-</div><div class="section">
-<b>Viral Hook Generator</b><br>
-<button class="orange" onclick="generateHooks()">Generate 5 Hooks</button>
-<textarea id="hooks" style="width:100%;height:90px;border-radius:8px;border:none;margin-top:8px"></textarea>
-</div><div class="section">
-<b>Auto Story Generator</b><br>
-<button onclick="autoStory()">Create 10 Scene Story</button>
-</div></div><div class="grid" id="imageGrid"></div><div class="controls">
-<button onclick="generatePrompt()">Generate Video Prompts</button>
-<button class="secondary" onclick="downloadTXT()">Download TXT</button>
-<button class="dark" onclick="downloadJSON()">Download JSON</button>
-</div><textarea id="output" placeholder="Generated prompts, hooks, and scripts will appear here..."></textarea><div class="footer">© 2026 Ghany Media Tools V3 – AI Content Factory. All Rights Reserved.</div>
-</div><script>
-const grid=document.getElementById('imageGrid');
+<body class="p-4 md:p-8">
 
-for(let i=1;i<=10;i++){
-let div=document.createElement('div');
-div.className='box';
+    <!-- Header -->
+    <header class="max-w-6xl mx-auto mb-10 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight">
+            Ghany Media <span class="gradient-text">AI Tools</span>
+        </h1>
+        <p class="text-slate-400 text-lg uppercase tracking-widest font-medium">Ultimate Video Generator</p>
+    </header>
 
-div.innerHTML=`
-<label><b>Scene ${i}</b></label>
-<input type="file" accept="image/*" onchange="previewImage(event,${i})">
-<img id="preview${i}" style="display:none">
-<textarea id="dialog${i}" placeholder="dialog karakter..."></textarea>`;
+    <main class="max-w-6xl mx-auto">
+        
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-wrap gap-2 mb-8 justify-center">
+            <button onclick="switchTab('scene')" id="tab-scene" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card tab-active">
+                <i class="fas fa-clapperboard mr-2"></i>Scene Generator
+            </button>
+            <button onclick="switchTab('affiliate')" id="tab-affiliate" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
+                <i class="fas fa-shopping-cart mr-2"></i>Affiliate Generator
+            </button>
+            <button onclick="switchTab('hook')" id="tab-hook" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
+                <i class="fas fa-bolt mr-2"></i>Viral Hook
+            </button>
+            <button onclick="switchTab('caption')" id="tab-caption" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
+                <i class="fas fa-hashtag mr-2"></i>Captions & Hashtags
+            </button>
+        </nav>
 
-grid.appendChild(div); }
+        <!-- Tool Containers -->
+        <div class="glass rounded-3xl p-6 md:p-10">
+            
+            <!-- TOOL 1: Scene Generator -->
+            <div id="tool-scene" class="tool-content">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Video Scene Generator</h2>
+                    <p class="text-slate-400">Design up to 5 cinematic scenes for your AI video production.</p>
+                </div>
 
-function previewImage(event,i){ const img=document.getElementById('preview'+i); img.src=URL.createObjectURL(event.target.files[0]); img.style.display='block'; }
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" id="scene-container">
+                    <!-- Scenes will be rendered here dynamically for cleanliness -->
+                </div>
 
-function generateHooks(){ let topic=document.getElementById('topic').value||"cerita menarik"; let product=document.getElementById('product').value;
+                <div class="flex flex-wrap gap-4 items-center">
+                    <button onclick="generateScenePrompt()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all">
+                        <span id="scene-btn-text">Generate Video Prompt</span>
+                        <div id="scene-loader" class="loader ml-3"></div>
+                    </button>
+                    <button onclick="clearScenes()" class="text-slate-400 hover:text-white transition-colors">Clear Fields</button>
+                </div>
 
-let hooks=[ "Kamu tidak akan percaya apa yang terjadi dalam cerita ini...", "Banyak orang tidak tahu kisah ini...", "Cerita ini bikin orang tercengang!", "Apa yang terjadi selanjutnya benar-benar di luar dugaan...", "Ini alasan kenapa cerita ini viral di internet..." ];
+                <div class="mt-10">
+                    <label class="block mb-2 text-sm font-medium text-slate-400">Cinematic Prompt Result</label>
+                    <textarea id="scene-output" class="w-full h-80 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Result will appear here..."></textarea>
+                    <div class="flex gap-4 mt-4">
+                        <button onclick="copyToClipboard('scene-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-copy mr-2"></i>Copy Prompt
+                        </button>
+                        <button onclick="downloadTxt('scene-output', 'video_scene_prompt.txt')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-download mr-2"></i>Download .txt
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-let result="";
+            <!-- TOOL 2: Affiliate Video Generator -->
+            <div id="tool-affiliate" class="tool-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Affiliate Video Generator</h2>
+                    <p class="text-slate-400">Create high-converting scripts in Bahasa Indonesia.</p>
+                </div>
 
-hooks.forEach((h,i)=>{ result+=Hook ${i+1}: ${h} (${topic}${product?" + " + product:""})\n; });
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama Produk</label>
+                        <input type="text" id="aff-product" placeholder="Contoh: PowerBank 20.000mAh" class="w-full p-3 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kategori</label>
+                        <input type="text" id="aff-category" placeholder="Elektronik / Fashion" class="w-full p-3 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Harga (Opsional)</label>
+                        <input type="text" id="aff-price" placeholder="Contoh: Rp 150.000" class="w-full p-3 rounded-xl">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium mb-1">Manfaat Utama (Pisahkan dengan koma)</label>
+                        <input type="text" id="aff-benefits" placeholder="Tahan lama, Fast charging, Ringan" class="w-full p-3 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Target Audience</label>
+                        <input type="text" id="aff-target" placeholder="Mahasiswa, Pekerja Kantor" class="w-full p-3 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Platform</label>
+                        <select id="aff-platform" class="w-full p-3 rounded-xl">
+                            <option value="TikTok">TikTok</option>
+                            <option value="Shopee Video">Shopee Video</option>
+                            <option value="Instagram Reels">Instagram Reels</option>
+                            <option value="Tokopedia Play">Tokopedia Play</option>
+                        </select>
+                    </div>
+                </div>
 
-document.getElementById('hooks').value=result; }
+                <button onclick="generateAffiliateScript()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all mb-8">
+                    <span id="aff-btn-text">Generate Affiliate Script</span>
+                    <div id="aff-loader" class="loader ml-3"></div>
+                </button>
 
-function autoStory(){ let topic=document.getElementById('topic').value||"sebuah cerita";
+                <div>
+                    <textarea id="aff-output" class="w-full h-96 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Affiliate script will appear here..."></textarea>
+                    <div class="flex gap-4 mt-4">
+                        <button onclick="copyToClipboard('aff-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-copy mr-2"></i>Copy Script
+                        </button>
+                        <button onclick="downloadTxt('aff-output', 'affiliate_script.txt')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-download mr-2"></i>Download .txt
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-for(let i=1;i<=10;i++){ let dialog=document.getElementById('dialog'+i);
+            <!-- TOOL 3: Viral Hook Generator -->
+            <div id="tool-hook" class="tool-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Viral Hook Generator</h2>
+                    <p class="text-slate-400">10 Hooks designed to stop the scroll instantly.</p>
+                </div>
 
-dialog.value=Bagian ${i} dari cerita tentang ${topic}.; } }
+                <div class="flex flex-col md:flex-row gap-4 mb-8">
+                    <input type="text" id="hook-topic" placeholder="Masukkan Topik atau Produk..." class="flex-1 p-4 rounded-xl text-lg">
+                    <button onclick="generateHooks()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all justify-center">
+                        <span id="hook-btn-text">Generate Hooks</span>
+                        <div id="hook-loader" class="loader ml-3"></div>
+                    </button>
+                </div>
 
-function generatePrompt(){ let model=document.getElementById('model').value; let duration=document.getElementById('duration').value; let prompt="";
+                <div id="hook-result-container" class="hidden">
+                    <div class="grid grid-cols-1 gap-4" id="hook-list">
+                        <!-- Hooks will be injected here -->
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="copyHooks()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-copy mr-2"></i>Copy All Hooks
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-for(let i=1;i<=10;i++){ let img=document.getElementById('preview'+i); let dialog=document.getElementById('dialog'+i).value;
+            <!-- TOOL 4: Caption & Hashtag Generator -->
+            <div id="tool-caption" class="tool-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Caption & Hashtag Generator</h2>
+                    <p class="text-slate-400">Viral captions and optimized hashtags for all platforms.</p>
+                </div>
 
-if(img.src && img.style.display==='block'){
+                <div class="flex flex-col md:flex-row gap-4 mb-8">
+                    <input type="text" id="cap-topic" placeholder="Masukkan Topik atau Produk..." class="flex-1 p-4 rounded-xl text-lg">
+                    <button onclick="generateCaption()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all justify-center">
+                        <span id="cap-btn-text">Generate Caption</span>
+                        <div id="cap-loader" class="loader ml-3"></div>
+                    </button>
+                </div>
 
-let base=Scene ${i}: ultra realistic cinematic video, natural human movement, detailed environment, ${duration} seconds, vertical 9:16.;
+                <div class="mt-4">
+                    <textarea id="cap-output" class="w-full h-80 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Captions and hashtags will appear here..."></textarea>
+                    <div class="flex gap-4 mt-4">
+                        <button onclick="copyToClipboard('cap-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                            <i class="fas fa-copy mr-2"></i>Copy Content
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-if(model==='kling'){ base=Scene ${i}: cinematic realism, expressive acting, natural lighting, ${duration}s vertical video.; }
+        </div>
+    </main>
 
-if(model==='sora'){ base=Scene ${i}: photorealistic cinematic shot, realistic motion, ${duration} second vertical clip.; }
+    <!-- Footer -->
+    <footer class="mt-20 py-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+        <p>&copy; 2026 Ghany Media Tools. All Rights Reserved.</p>
+    </footer>
 
-if(dialog.trim()!=""){ base+= Character says in Indonesian: \"${dialog}\".; }
+    <!-- Notification -->
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none z-50">
+        Copied to clipboard!
+    </div>
 
-prompt+=base+"\n\n"; } }
+    <script>
+        // Initialize Scene Inputs
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('scene-container');
+            for (let i = 1; i <= 5; i++) {
+                container.innerHTML += `
+                    <div class="glass-card p-5 rounded-2xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs">${i}</span>
+                            <h3 class="font-bold">SCENE ${i}</h3>
+                        </div>
+                        <div class="space-y-3">
+                            <input type="text" id="s${i}-title" placeholder="Scene Title" class="w-full p-2 text-xs rounded-lg">
+                            <textarea id="s${i}-desc" placeholder="Brief Description" class="w-full p-2 text-xs rounded-lg h-16"></textarea>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="s${i}-char" placeholder="Character" class="w-full p-2 text-xs rounded-lg">
+                                <input type="text" id="s${i}-env" placeholder="Environment" class="w-full p-2 text-xs rounded-lg">
+                                <input type="text" id="s${i}-cam" placeholder="Camera Movement" class="w-full p-2 text-xs rounded-lg">
+                                <input type="text" id="s${i}-light" placeholder="Lighting" class="w-full p-2 text-xs rounded-lg">
+                                <input type="text" id="s${i}-mood" placeholder="Mood" class="w-full p-2 text-xs rounded-lg">
+                                <input type="text" id="s${i}-dialog" placeholder="Dialogue" class="w-full p-2 text-xs rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
 
-document.getElementById('output').value=prompt; }
+        // Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tool-' + tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('tab-' + tabId).classList.add('tab-active');
+        }
 
-function downloadTXT(){ let text=document.getElementById('output').value; let blob=new Blob([text],{type:'text/plain'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="ghany_media_ai_content.txt";
+        // TOOL 1: Scene Generation Logic
+        function generateScenePrompt() {
+            showLoader('scene');
+            
+            setTimeout(() => {
+                let finalPrompt = `GHANY MEDIA ULTIMATE CINEMATIC AI VIDEO PROMPT\n`;
+                finalPrompt += `===============================================\n\n`;
 
-a.click(); }
+                for (let i = 1; i <= 5; i++) {
+                    const title = document.getElementById(`s${i}-title`).value || `Untitled Scene ${i}`;
+                    const desc = document.getElementById(`s${i}-desc`).value || "N/A";
+                    const char = document.getElementById(`s${i}-char`).value || "N/A";
+                    const env = document.getElementById(`s${i}-env`).value || "N/A";
+                    const cam = document.getElementById(`s${i}-cam`).value || "N/A";
+                    const light = document.getElementById(`s${i}-light`).value || "N/A";
+                    const mood = document.getElementById(`s${i}-mood`).value || "N/A";
+                    const dialog = document.getElementById(`s${i}-dialog`).value || "N/A";
 
-function downloadJSON(){ let scenes=[];
+                    finalPrompt += `SCENE ${i}\n`;
+                    finalPrompt += `Title: ${title}\n`;
+                    finalPrompt += `Description: ${desc}\n`;
+                    finalPrompt += `Character: ${char}\n`;
+                    finalPrompt += `Environment: ${env}\n`;
+                    finalPrompt += `Camera Movement: ${cam}\n`;
+                    finalPrompt += `Lighting: ${light}\n`;
+                    finalPrompt += `Mood: ${mood}\n`;
+                    finalPrompt += `Dialogue: "${dialog}"\n\n`;
+                }
 
-for(let i=1;i<=10;i++){ let dialog=document.getElementById('dialog'+i).value; if(dialog!=""){ scenes.push({scene:i,dialog:dialog}); } }
+                document.getElementById('scene-output').value = finalPrompt;
+                hideLoader('scene');
+            }, 800);
+        }
 
-let blob=new Blob([JSON.stringify(scenes,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="ghany_media_project.json";
+        function clearScenes() {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`s${i}-title`).value = "";
+                document.getElementById(`s${i}-desc`).value = "";
+                document.getElementById(`s${i}-char`).value = "";
+                document.getElementById(`s${i}-env`).value = "";
+                document.getElementById(`s${i}-cam`).value = "";
+                document.getElementById(`s${i}-light`).value = "";
+                document.getElementById(`s${i}-mood`).value = "";
+                document.getElementById(`s${i}-dialog`).value = "";
+            }
+            document.getElementById('scene-output').value = "";
+        }
 
-a.click(); } </script>
+        // TOOL 2: Affiliate Generation Logic
+        function generateAffiliateScript() {
+            const product = document.getElementById('aff-product').value || "[Nama Produk]";
+            const category = document.getElementById('aff-category').value || "[Kategori]";
+            const price = document.getElementById('aff-price').value || "[Harga]";
+            const benefits = document.getElementById('aff-benefits').value || "[Manfaat]";
+            const target = document.getElementById('aff-target').value || "[Target Audience]";
+            const platform = document.getElementById('aff-platform').value;
 
+            showLoader('aff');
+
+            setTimeout(() => {
+                let script = `AFFILIATE VIDEO SCRIPT - ${platform.toUpperCase()}\n`;
+                script += `Target: ${target} | Kategori: ${category}\n`;
+                script += `===============================================\n\n`;
+                
+                script += `HOOK PEMBUKA (0-3 Detik):\n`;
+                script += `"Jangan scroll dulu kalau kamu ${target} dan lagi nyari ${category} yang harganya cuma ${price} tapi kualitasnya gila banget!"\n\n`;
+
+                script += `SCENE 1: MASALAH\n`;
+                script += `(Visual: Orang terlihat bingung/kesal dengan produk lama yang rusak/jelek)\n`;
+                script += `"Jujur capek banget nggak sih kalau harus ngadepin masalah kayak gini terus?"\n\n`;
+
+                script += `SCENE 2: PERKENALAN PRODUK\n`;
+                script += `(Visual: Close up produk ${product} yang terlihat estetik)\n`;
+                script += `"Nah, ini dia solusinya! Kenalin ${product}. Barang yang lagi viral banget dan wajib kalian punya."\n\n`;
+
+                script += `SCENE 3: MANFAAT PRODUK\n`;
+                script += `(Visual: Menunjukkan fitur utama satu per satu)\n`;
+                script += `"Kenapa harus punya ini? Karena ini ${benefits}. Bener-bener ngebantu banget buat kegiatan sehari-hari."\n\n`;
+
+                script += `SCENE 4: DEMONSTRASI\n`;
+                script += `(Visual: Penggunaan produk secara nyata dan hasilnya memuaskan)\n`;
+                script += `"Lihat sendiri kan hasilnya? Gak cuma fungsional, tapi desainnya juga cakep banget buat dibawa kemana-mana."\n\n`;
+
+                script += `SCENE 5: CALL TO ACTION\n`;
+                script += `(Visual: Menunjuk ke arah keranjang kuning atau link di bio)\n`;
+                script += `"Mumpung lagi promo dan stoknya terbatas, buruan cek keranjang kuning sekarang sebelum kehabisan!"\n\n`;
+
+                script += `CAPTION VIRAL:\n`;
+                script += `Akhirnya nemu juga ${product} yang kualitasnya premium tapi harga miring! 😍 Wajib banget masuk wishlist kalian sih ini. Checkout sekarang sebelum harganya balik normal! 👇\n\n`;
+
+                script += `10 HASHTAG VIRAL:\n`;
+                script += `#${product.replace(/\s+/g, '')} #affiliate${platform.replace(/\s+/g, '')} #racunshopee #barangunik #rekomendasiproduk #viralindonesia #fyp #murahlebay #shoppinghaul #racuntiktok`;
+
+                document.getElementById('aff-output').value = script;
+                hideLoader('aff');
+            }, 1000);
+        }
+
+        // TOOL 3: Viral Hook Logic
+        function generateHooks() {
+            const topic = document.getElementById('hook-topic').value || "Produk ini";
+            showLoader('hook');
+
+            setTimeout(() => {
+                const hooks = [
+                    `Jangan scroll dulu kalau kamu punya masalah sama ${topic}...`,
+                    `${topic} ini lagi viral banget di TikTok, ternyata ini rahasianya!`,
+                    `Gue baru nemu barang murah tapi kualitas ${topic} ini gila banget...`,
+                    `Kalau kamu sering ngalamin ini, wajib lihat video ${topic} ini sampai habis.`,
+                    `Baru tau ternyata ada alat sekeren ${topic} ini!`,
+                    `Stop beli ${topic} sebelum kamu nonton video ini, jangan sampai nyesel!`,
+                    `Pantesan ${topic} ini sold out terus, ternyata beneran sebagus itu...`,
+                    `Cara rahasia biar kamu gak ribet lagi pake ${topic}.`,
+                    `3 Alasan kenapa kamu butuh ${topic} ini di tahun 2026.`,
+                    `Awalnya iseng beli ${topic} ini, eh malah ketagihan pakenya!`
+                ];
+
+                const container = document.getElementById('hook-list');
+                container.innerHTML = '';
+                hooks.forEach((hook, index) => {
+                    container.innerHTML += `
+                        <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 flex justify-between items-center group">
+                            <span class="text-sm md:text-base">${index + 1}. ${hook}</span>
+                            <button onclick="copyIndividualHook('${hook}')" class="text-blue-400 opacity-0 group-hover:opacity-100 transition-all hover:text-white">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('hook-result-container').classList.remove('hidden');
+                hideLoader('hook');
+            }, 600);
+        }
+
+        function copyHooks() {
+            let allHooks = "";
+            document.querySelectorAll('#hook-list span').forEach(el => {
+                allHooks += el.innerText + "\n";
+            });
+            copyTextToClipboard(allHooks);
+        }
+
+        function copyIndividualHook(text) {
+            copyTextToClipboard(text);
+        }
+
+        // TOOL 4: Caption Logic
+        function generateCaption() {
+            const topic = document.getElementById('cap-topic').value || "Produk";
+            showLoader('cap');
+
+            setTimeout(() => {
+                let output = `CAPTION VIRAL:\n`;
+                output += `Siapa yang dari kemarin nanyain ${topic} ini? 😍 Akhirnya ready stock lagi guys! Jujur ini worth it banget buat kalian yang pengen tampil kece tapi tetep budget-friendly. Bener-bener definisi ada harga ada rupa, tapi yang ini harganya terlalu murah buat kualitas sekeren ini! ✨\n\n`;
+                output += `Klik link di bio / keranjang kuning sekarang! 🛒\n\n`;
+                
+                output += `TIKTOK HASHTAGS:\n`;
+                output += `#${topic.replace(/\s+/g, '')} #racuntiktok #fyp #viral #trending #xyzbca #affiliate #shop #musthave #ootd\n\n`;
+
+                output += `SHOPEE AFFILIATE HASHTAGS:\n`;
+                output += `#shopeehaul #racunshopee #shopeeid #shopeefeed #shopeevideo #affiliateshopee #spaylater #murah #diskon #shopeecheck\n\n`;
+
+                output += `IG REELS HASHTAGS:\n`;
+                output += `#reelsinstagram #viralreels #reelsviral #explorepage #instadaily #trendingnow #shoppingonline #lifestyle #indonesia #${topic.replace(/\s+/g, '')}reels`;
+
+                document.getElementById('cap-output').value = output;
+                hideLoader('cap');
+            }, 800);
+        }
+
+        // Helpers
+        function showLoader(id) {
+            document.getElementById(id + '-btn-text').style.opacity = '0.5';
+            document.getElementById(id + '-loader').style.display = 'block';
+        }
+
+        function hideLoader(id) {
+            document.getElementById(id + '-btn-text').style.opacity = '1';
+            document.getElementById(id + '-loader').style.display = 'none';
+        }
+
+        function copyToClipboard(id) {
+            const text = document.getElementById(id).value;
+            copyTextToClipboard(text);
+        }
+
+        function copyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0', 'translate-y-10');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2000);
+        }
+
+        function downloadTxt(id, filename) {
+            const text = document.getElementById(id).value;
+            if(!text) return;
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
 </body>
-</html>
+                  </html>
