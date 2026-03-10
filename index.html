@@ -1,525 +1,262 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghany Film Generator - AI Video Prompt Tool</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0c;
-            --card-bg: #16161d;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --accent-color: #8b5cf6;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --border-color: #2e2e3a;
-        }
+<title>Ghany AI Studio V2</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+<style>
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+body{
+background:linear-gradient(135deg,#020617,#1e3a8a,#7c3aed);
+color:white;
+font-family:Arial;
+text-align:center;
+padding:40px;
+}
 
-        /* Animated Background Gradient */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% -20%, #312e81 0%, transparent 50%);
-            z-index: -1;
-            opacity: 0.5;
-        }
+.container{
+max-width:900px;
+margin:auto;
+background:rgba(255,255,255,0.05);
+padding:30px;
+border-radius:20px;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+input,select{
+width:90%;
+padding:10px;
+margin:10px;
+border-radius:10px;
+border:none;
+}
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            animation: fadeInDown 0.8s ease-out;
-        }
+button{
+padding:12px 20px;
+margin:10px;
+border:none;
+border-radius:10px;
+background:#7c3aed;
+color:white;
+cursor:pointer;
+}
 
-        header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
+button:hover{
+background:#9333ea;
+}
 
-        header p {
-            color: var(--text-dim);
-            font-size: 1.2rem;
-        }
+.result{
+margin-top:20px;
+background:black;
+padding:20px;
+border-radius:10px;
+white-space:pre-line;
+}
 
-        /* Card Styles */
-        .generator-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            margin-bottom: 40px;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
+.library{
+margin-top:20px;
+background:#111;
+padding:15px;
+border-radius:10px;
+}
 
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: rgba(0,0,0,0.2);
-            padding: 5px;
-            border-radius: 12px;
-        }
+footer{
+margin-top:40px;
+opacity:0.7;
+}
 
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            color: var(--text-dim);
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
+</style>
 
-        .tab-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-dim);
-        }
-
-        input, select, textarea {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-color);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 14px;
-            background: var(--primary-gradient);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .generate-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Results Area */
-        #results-container {
-            display: none;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .scene-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .scene-badge {
-            background: var(--accent-color);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-
-        .prompt-text {
-            font-size: 1rem;
-            color: #e2e8f0;
-            margin-bottom: 15px;
-            white-space: pre-wrap;
-        }
-
-        .action-bar {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background: rgba(255,255,255,0.05);
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .action-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .action-btn.copy-all {
-            background: #2563eb;
-            border: none;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .copy-toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-            header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
 </head>
+
 <body>
 
-    <div class="bg-glow"></div>
+<h1>Ghany AI Studio V2</h1>
+<p>Cinematic AI Video Prompt Generator</p>
 
-    <div class="container">
-        <header>
-            <h1>Ghany Film Generator</h1>
-            <p>Create cinematic AI video prompts like real movies</p>
-        </header>
+<div class="container">
 
-        <div class="generator-card">
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchMode('film')">Film Scene Generator</button>
-                <button class="tab-btn" onclick="switchMode('restoration')">Restoration Video</button>
-            </div>
+<h3>Film Prompt Generator</h3>
 
-            <div id="film-form" class="form-grid">
-                <div class="form-group full-width">
-                    <label>Judul Cerita / Konsep</label>
-                    <input type="text" id="title" placeholder="Contoh: Sang Penjaga Hutan Terakhir">
-                </div>
-                <div class="form-group">
-                    <label>Karakter Utama</label>
-                    <input type="text" id="charName" placeholder="Contoh: Seorang Pria Tua">
-                </div>
-                <div class="form-group">
-                    <label>Genre</label>
-                    <select id="genre">
-                        <option value="cinematic">Cinematic</option>
-                        <option value="fantasy">Fantasy</option>
-                        <option value="comedy">Comedy</option>
-                        <option value="documentary">Documentary</option>
-                    </select>
-                </div>
-                <div class="form-group full-width">
-                    <label>Deskripsi Karakter (Penting untuk Konsistensi)</label>
-                    <textarea id="charDesc" placeholder="Contoh: Mengenakan jubah hijau lumut, mata berwarna abu-abu, janggut putih panjang berkilau..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Lokasi Utama</label>
-                    <input type="text" id="location" placeholder="Contoh: Hutan Pinus berkabut">
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Scene</label>
-                    <select id="sceneCount">
-                        <option value="3">3 Scene</option>
-                        <option value="4" selected>4 Scene</option>
-                        <option value="5">5 Scene</option>
-                        <option value="6">6 Scene</option>
-                    </select>
-                </div>
-                <div class="form-group full-width">
-                    <label>Durasi per Scene (detik)</label>
-                    <input type="number" id="duration" value="5" min="1" max="20">
-                </div>
-            </div>
+<input id="title" placeholder="Judul cerita">
 
-            <button class="generate-btn" onclick="generatePrompts()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>
-                Generate Cinematic Prompts
-            </button>
-        </div>
+<input id="character" placeholder="Karakter utama">
 
-        <div id="results-container">
-            <div class="result-header">
-                <h2>Generated Prompts</h2>
-            </div>
-            <div id="results-list">
-                <!-- Scenes will appear here -->
-            </div>
-            <div class="action-bar">
-                <button class="action-btn copy-all" onclick="copyAllPrompts()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
-                    Copy All Prompts
-                </button>
-                <button class="action-btn" onclick="downloadPrompts()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
-                    Download .txt
-                </button>
-            </div>
-        </div>
-    </div>
+<input id="location" placeholder="Lokasi">
 
-    <div id="toast" class="copy-toast">Prompt berhasil disalin!</div>
+<select id="scene">
+<option value="3">3 Scene</option>
+<option value="4">4 Scene</option>
+<option value="5">5 Scene</option>
+<option value="6">6 Scene</option>
+</select>
 
-    <script>
-        let currentMode = 'film';
+<select id="duration">
+<option value="8">Durasi 8 detik</option>
+<option value="10">Durasi 10 detik</option>
+<option value="15">Durasi 15 detik</option>
+</select>
 
-        function switchMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            const charDescLabel = document.querySelector('label[for="charDesc"]') || document.querySelector('.form-group.full-width label');
-            
-            if (mode === 'restoration') {
-                document.getElementById('title').placeholder = "Contoh: Restorasi Lukisan Kuno";
-                document.getElementById('charName').placeholder = "Contoh: Lukisan Mona Lisa";
-                document.getElementById('charDesc').placeholder = "Contoh: Lukisan cat minyak tua dengan retakan halus, warna memudar, bingkai kayu gelap...";
-                document.getElementById('location').placeholder = "Contoh: Studio restorasi seni profesional";
-            } else {
-                document.getElementById('title').placeholder = "Contoh: Sang Penjaga Hutan Terakhir";
-                document.getElementById('charName').placeholder = "Contoh: Seorang Pria Tua";
-                document.getElementById('charDesc').placeholder = "Contoh: Mengenakan jubah hijau lumut, mata berwarna abu-abu, janggut putih panjang berkilau...";
-                document.getElementById('location').placeholder = "Contoh: Hutan Pinus berkabut";
-            }
-        }
+<button onclick="generateFilm()">Generate Film Prompt</button>
 
-        const MANDATORY_KEYWORDS = "Superrealistic, Natural human movement, word lighting, Hight detail facial expresif, cinematic camera movement, ultra realistic film style";
 
-        function generatePrompts() {
-            const title = document.getElementById('title').value || "Untitled Story";
-            const charName = document.getElementById('charName').value || "The Character";
-            const charDesc = document.getElementById('charDesc').value || "";
-            const location = document.getElementById('location').value || "A beautiful setting";
-            const genre = document.getElementById('genre').value;
-            const sceneCount = parseInt(document.getElementById('sceneCount').value);
-            const duration = document.getElementById('duration').value;
+<h3>Storyboard Generator</h3>
 
-            const resultsList = document.getElementById('results-list');
-            resultsList.innerHTML = '';
+<button onclick="generateStoryboard()">Generate Storyboard</button>
 
-            let prompts = [];
 
-            if (currentMode === 'film') {
-                prompts = generateFilmLogic(title, charName, charDesc, location, genre, sceneCount, duration);
-            } else {
-                prompts = generateRestorationLogic(title, charName, charDesc, location, genre, sceneCount, duration);
-            }
+<h3>Image Reference</h3>
 
-            prompts.forEach((p, index) => {
-                const card = document.createElement('div');
-                card.className = 'scene-card';
-                card.innerHTML = `
-                    <div class="scene-badge">Scene ${index + 1}</div>
-                    <div class="prompt-text" id="prompt-${index}">${p}</div>
-                    <button class="action-btn" style="width: auto; padding: 8px 15px; font-size: 0.8rem;" onclick="copySingle(${index})">
-                        Copy Scene ${index + 1}
-                    </button>
-                `;
-                resultsList.appendChild(card);
-            });
+<input type="file" id="imageUpload">
 
-            document.getElementById('results-container').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('results-container').offsetTop - 20, behavior: 'smooth' });
-        }
+<p>Upload gambar referensi untuk inspirasi visual</p>
 
-        function generateFilmLogic(title, charName, charDesc, location, genre, count, dur) {
-            const scenes = [];
-            const flow = [
-                `Establishing shot of ${location}. ${charName} appearing in the distance, ${charDesc}. Camera slowly zooms in.`,
-                `Close-up on ${charName}. ${charDesc}. Showing a deep emotion related to ${title}.`,
-                `Action sequence. ${charName} interacting with the environment in ${location}. High intensity movement.`,
-                `Medium shot. ${charName} discovery something important. Soft focus background.`,
-                `Wide angle landscape. ${charName} walking away into the horizon of ${location}.`,
-                `The final resolution. A poetic close shot of ${charName}'s face, ${charDesc}.`
-            ];
 
-            for (let i = 0; i < count; i++) {
-                let sceneBase = flow[i % flow.length];
-                let prompt = `[Film: ${title}] Scene ${i+1}: ${sceneBase} Genre: ${genre}. Duration: ${dur}s. Character focus: ${charName} with traits: ${charDesc}. ${MANDATORY_KEYWORDS}`;
-                scenes.push(prompt);
-            }
-            return scenes;
-        }
+<h3>Image Prompt Generator</h3>
 
-        function generateRestorationLogic(title, charName, charDesc, location, genre, count, dur) {
-            const scenes = [];
-            const restorationSteps = [
-                `EXTREME CLOSE UP. Initial state: ${charName} looking extremely damaged, broken parts, dusty and faded colors. ${charDesc}. Setting: ${location}.`,
-                `MACRO SHOT. Professional restoration process begins on ${charName}. Hands or tools carefully cleaning the surface, revealing hidden details.`,
-                `TIME LAPSE FEEL. Progressive repair of ${charName}. The cracks are disappearing, colors are being revived. Light reflecting on the new surface.`,
-                `FINAL RESULT. ${charName} is now fully restored and looking brand new, pristine condition, sparkling details. ${charDesc}.`,
-                `BEAUTY SHOT. Rotating around the finished ${charName} in ${location}. Perfect lighting highlights the masterwork of restoration.`,
-                `THE COMPARISON. A split-second memory of the old state transitioning into the new perfect state of ${charName}.`
-            ];
+<input id="object" placeholder="Object / Character">
 
-            for (let i = 0; i < count; i++) {
-                let sceneBase = restorationSteps[i % restorationSteps.length];
-                let prompt = `[Restoration: ${title}] Stage ${i+1}: ${sceneBase} Style: ${genre}. Duration: ${dur}s. Object: ${charName}. ${MANDATORY_KEYWORDS}`;
-                scenes.push(prompt);
-            }
-            return scenes;
-        }
+<input id="environment" placeholder="Environment">
 
-        function copySingle(index) {
-            const text = document.getElementById(`prompt-${index}`).innerText;
-            copyToClipboard(text);
-        }
+<input id="lighting" placeholder="Lighting">
 
-        function copyAllPrompts() {
-            let allText = "";
-            const sceneTexts = document.querySelectorAll('.prompt-text');
-            sceneTexts.forEach((el, i) => {
-                allText += `SCENE ${i+1}:\n${el.innerText}\n\n`;
-            });
-            copyToClipboard(allText);
-        }
+<button onclick="generateImage()">Generate Image Prompt</button>
 
-        function copyToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 2000);
-        }
 
-        function downloadPrompts() {
-            let content = `GHANY FILM GENERATOR - PROMPT LIST\n`;
-            content += `Title: ${document.getElementById('title').value || "Untitled"}\n`;
-            content += `==========================================\n\n`;
-            
-            const sceneTexts = document.querySelectorAll('.prompt-text');
-            sceneTexts.forEach((el, i) => {
-                content += `SCENE ${i+1}:\n${el.innerText}\n\n`;
-            });
+<div class="result" id="result"></div>
 
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Ghany-Film-Prompts-${Date.now()}.txt`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-    </script>
+<button onclick="downloadPrompt()">Download Prompt</button>
+
+
+<div class="library">
+
+<h3>Prompt Library</h3>
+
+<p>Cinematic travel scene</p>
+<p>Fantasy movie opening</p>
+<p>Comedy dialogue scene</p>
+<p>Documentary style video</p>
+
+</div>
+
+</div>
+
+
+<footer>
+
+<p>© 2026 Ghany Media</p>
+<p>All Rights Reserved</p>
+
+</footer>
+
+
+<script>
+
+function generateFilm(){
+
+let title=document.getElementById("title").value
+let character=document.getElementById("character").value
+let location=document.getElementById("location").value
+let scene=document.getElementById("scene").value
+let duration=document.getElementById("duration").value
+
+let output=""
+
+for(let i=1;i<=scene;i++){
+
+output+=`Scene ${i}
+
+${character} in ${location},
+scene from story "${title}",
+
+Superrealistic
+Natural human movement
+word lighting
+Hight detail facial expresif
+cinematic camera movement
+
+duration ${duration} seconds
+
+`
+
+}
+
+document.getElementById("result").innerText=output
+
+}
+
+
+function generateStoryboard(){
+
+let storyboard=`
+
+Storyboard
+
+Scene 1
+Opening cinematic environment
+
+Scene 2
+Character introduction
+
+Scene 3
+Conflict begins
+
+Scene 4
+Action or dialogue moment
+
+Scene 5
+Climax scene
+
+Scene 6
+Ending cinematic shot
+
+`
+
+document.getElementById("result").innerText=storyboard
+
+}
+
+
+function generateImage(){
+
+let obj=document.getElementById("object").value
+let env=document.getElementById("environment").value
+let light=document.getElementById("lighting").value
+
+let prompt=`
+
+Image Reference Prompt
+
+${obj} in ${env}
+
+${light} lighting
+
+cinematic composition
+ultra realistic
+8k cinematic photo
+
+`
+
+document.getElementById("result").innerText=prompt
+
+}
+
+
+function downloadPrompt(){
+
+let text=document.getElementById("result").innerText
+
+let blob=new Blob([text],{type:"text/plain"})
+
+let link=document.createElement("a")
+
+link.href=URL.createObjectURL(blob)
+
+link.download="ghany-ai-prompt.txt"
+
+link.click()
+
+}
+
+</script>
+
 </body>
-</html>
+    </html>
