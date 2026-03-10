@@ -3,531 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghany Media AI Tools - Ultimate Video Generator</title>
+    <title>Ghany AI Prompt Studio PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
         body {
             font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at top left, #1e293b, #0f172a);
-            min-height: 100vh;
-            color: #f8fafc;
+            background-color: #09090b;
+            color: #fafafa;
         }
-
-        .glass {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(63, 63, 70, 0.5);
+            border-radius: 1rem;
+        }
+        .input-field {
+            background: #18181b;
+            border: 1px solid #3f3f46;
+            color: #fff;
             transition: all 0.3s ease;
         }
-
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+        .input-field:focus {
+            border-color: #8b5cf6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
         }
-
         .tab-active {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            color: white;
+            border-bottom: 2px solid #8b5cf6;
+            color: #8b5cf6;
         }
-
-        .gradient-text {
-            background: linear-gradient(to right, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Loading Spinner */
-        .loader {
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            border-top: 3px solid #3b82f6;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        input, textarea, select {
-            background: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            color: white !important;
-            outline: none !important;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
-        }
-
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: #18181b;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
+            background: #3f3f46;
             border-radius: 10px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade {
+            animation: fadeIn 0.4s ease forwards;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="min-h-screen p-4 md:p-8">
 
     <!-- Header -->
-    <header class="max-w-6xl mx-auto mb-10 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight">
-            Ghany Media <span class="gradient-text">AI Tools</span>
+    <header class="max-w-7xl mx-auto mb-10 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+            Ghany AI Prompt Studio PRO
         </h1>
-        <p class="text-slate-400 text-lg uppercase tracking-widest font-medium">Ultimate Video Generator</p>
+        <p class="mt-2 text-zinc-400 text-lg">Create Ultra Realistic Cinematic AI Video Prompts Instantly</p>
     </header>
 
-    <main class="max-w-6xl mx-auto">
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Navigation Tabs -->
-        <nav class="flex flex-wrap gap-2 mb-8 justify-center">
-            <button onclick="switchTab('scene')" id="tab-scene" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card tab-active">
-                <i class="fas fa-clapperboard mr-2"></i>Scene Generator
-            </button>
-            <button onclick="switchTab('affiliate')" id="tab-affiliate" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
-                <i class="fas fa-shopping-cart mr-2"></i>Affiliate Generator
-            </button>
-            <button onclick="switchTab('hook')" id="tab-hook" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
-                <i class="fas fa-bolt mr-2"></i>Viral Hook
-            </button>
-            <button onclick="switchTab('caption')" id="tab-caption" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all glass-card">
-                <i class="fas fa-hashtag mr-2"></i>Captions & Hashtags
-            </button>
-        </nav>
-
-        <!-- Tool Containers -->
-        <div class="glass rounded-3xl p-6 md:p-10">
+        <!-- Left Column: Input Forms -->
+        <div class="lg:col-span-5 space-y-6">
             
-            <!-- TOOL 1: Scene Generator -->
-            <div id="tool-scene" class="tool-content">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Video Scene Generator</h2>
-                    <p class="text-slate-400">Design up to 5 cinematic scenes for your AI video production.</p>
+            <!-- Video Prompt Form -->
+            <div class="glass-card p-6 shadow-xl">
+                <div class="flex items-center gap-2 mb-6 border-b border-zinc-800 pb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-violet-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+                    <h2 class="text-xl font-bold">Video Prompt Generator</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" id="scene-container">
-                    <!-- Scenes will be rendered here dynamically for cleanliness -->
-                </div>
-
-                <div class="flex flex-wrap gap-4 items-center">
-                    <button onclick="generateScenePrompt()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all">
-                        <span id="scene-btn-text">Generate Video Prompt</span>
-                        <div id="scene-loader" class="loader ml-3"></div>
-                    </button>
-                    <button onclick="clearScenes()" class="text-slate-400 hover:text-white transition-colors">Clear Fields</button>
-                </div>
-
-                <div class="mt-10">
-                    <label class="block mb-2 text-sm font-medium text-slate-400">Cinematic Prompt Result</label>
-                    <textarea id="scene-output" class="w-full h-80 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Result will appear here..."></textarea>
-                    <div class="flex gap-4 mt-4">
-                        <button onclick="copyToClipboard('scene-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-copy mr-2"></i>Copy Prompt
-                        </button>
-                        <button onclick="downloadTxt('scene-output', 'video_scene_prompt.txt')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-download mr-2"></i>Download .txt
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TOOL 2: Affiliate Video Generator -->
-            <div id="tool-affiliate" class="tool-content hidden">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Affiliate Video Generator</h2>
-                    <p class="text-slate-400">Create high-converting scripts in Bahasa Indonesia.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Nama Produk</label>
-                        <input type="text" id="aff-product" placeholder="Contoh: PowerBank 20.000mAh" class="w-full p-3 rounded-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="col-span-full">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Video Title</label>
+                        <input id="v-title" type="text" placeholder="E.g. The Lost Voyager" class="w-full mt-1 p-3 input-field rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Kategori</label>
-                        <input type="text" id="aff-category" placeholder="Elektronik / Fashion" class="w-full p-3 rounded-xl">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Character Name</label>
+                        <input id="v-char" type="text" placeholder="E.g. Sarah" class="w-full mt-1 p-3 input-field rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Harga (Opsional)</label>
-                        <input type="text" id="aff-price" placeholder="Contoh: Rp 150.000" class="w-full p-3 rounded-xl">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Emotion</label>
+                        <select id="v-emotion" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="calm and focused">Calm</option>
+                            <option value="overjoyed and laughing">Happy</option>
+                            <option value="melancholic and pensive">Sad</option>
+                            <option value="intense and determined">Determined</option>
+                            <option value="mysterious and subtle">Mysterious</option>
+                            <option value="terrified and heavy breathing">Scared</option>
+                        </select>
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium mb-1">Manfaat Utama (Pisahkan dengan koma)</label>
-                        <input type="text" id="aff-benefits" placeholder="Tahan lama, Fast charging, Ringan" class="w-full p-3 rounded-xl">
+                    <div class="col-span-full">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Location</label>
+                        <input id="v-location" type="text" placeholder="E.g. Neon Tokyo Street at Night" class="w-full mt-1 p-3 input-field rounded-lg">
+                    </div>
+                    <div class="col-span-full">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Activity</label>
+                        <textarea id="v-activity" rows="2" placeholder="What is the character doing?" class="w-full mt-1 p-3 input-field rounded-lg"></textarea>
+                    </div>
+                    <div class="col-span-full">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Dialogue</label>
+                        <input id="v-dialog" type="text" placeholder="Dialogue text..." class="w-full mt-1 p-3 input-field rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Target Audience</label>
-                        <input type="text" id="aff-target" placeholder="Mahasiswa, Pekerja Kantor" class="w-full p-3 rounded-xl">
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Dialogue Language</label>
+                        <select id="v-lang" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="Indonesian">Indonesian</option>
+                            <option value="English">English</option>
+                        </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Platform</label>
-                        <select id="aff-platform" class="w-full p-3 rounded-xl">
-                            <option value="TikTok">TikTok</option>
-                            <option value="Shopee Video">Shopee Video</option>
-                            <option value="Instagram Reels">Instagram Reels</option>
-                            <option value="Tokopedia Play">Tokopedia Play</option>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Video Style</label>
+                        <select id="v-style" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="cinematic">Cinematic</option>
+                            <option value="vlog">Vlog</option>
+                            <option value="documentary">Documentary</option>
+                            <option value="movie scene">Movie Scene</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Camera Movement</label>
+                        <select id="v-camera" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="slow tracking shot">Tracking</option>
+                            <option value="dolly zoom">Dolly Zoom</option>
+                            <option value="panoramic pan">Pan</option>
+                            <option value="extreme close-up">Close-up</option>
+                            <option value="handheld cinematic shake">Handheld</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Lighting</label>
+                        <select id="v-lighting" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="volumetric golden hour lighting">Golden Hour</option>
+                            <option value="moody neon lighting">Neon Noir</option>
+                            <option value="soft cinematic key light">Soft Key</option>
+                            <option value="dramatic high contrast lighting">Dramatic</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Time of Day</label>
+                        <select id="v-time" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="during sunrise">Sunrise</option>
+                            <option value="at high noon">Noon</option>
+                            <option value="during blue hour">Blue Hour</option>
+                            <option value="in the middle of the night">Midnight</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Aspect Ratio</label>
+                        <select id="v-ratio" class="w-full mt-1 p-3 input-field rounded-lg">
+                            <option value="9:16">9:16 (Reels/TikTok)</option>
+                            <option value="16:9">16:9 (YouTube)</option>
+                            <option value="1:1">1:1 (Square)</option>
                         </select>
                     </div>
                 </div>
 
-                <button onclick="generateAffiliateScript()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all mb-8">
-                    <span id="aff-btn-text">Generate Affiliate Script</span>
-                    <div id="aff-loader" class="loader ml-3"></div>
-                </button>
-
-                <div>
-                    <textarea id="aff-output" class="w-full h-96 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Affiliate script will appear here..."></textarea>
-                    <div class="flex gap-4 mt-4">
-                        <button onclick="copyToClipboard('aff-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-copy mr-2"></i>Copy Script
-                        </button>
-                        <button onclick="downloadTxt('aff-output', 'affiliate_script.txt')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-download mr-2"></i>Download .txt
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TOOL 3: Viral Hook Generator -->
-            <div id="tool-hook" class="tool-content hidden">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Viral Hook Generator</h2>
-                    <p class="text-slate-400">10 Hooks designed to stop the scroll instantly.</p>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-4 mb-8">
-                    <input type="text" id="hook-topic" placeholder="Masukkan Topik atau Produk..." class="flex-1 p-4 rounded-xl text-lg">
-                    <button onclick="generateHooks()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all justify-center">
-                        <span id="hook-btn-text">Generate Hooks</span>
-                        <div id="hook-loader" class="loader ml-3"></div>
+                <div class="mt-6 flex gap-2">
+                    <button onclick="generateVideoPrompt()" class="flex-1 bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-violet-900/20">
+                        Generate Prompt
+                    </button>
+                    <button onclick="clearForm('video')" class="bg-zinc-800 hover:bg-zinc-700 px-4 rounded-lg transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                     </button>
                 </div>
-
-                <div id="hook-result-container" class="hidden">
-                    <div class="grid grid-cols-1 gap-4" id="hook-list">
-                        <!-- Hooks will be injected here -->
-                    </div>
-                    <div class="mt-6 flex gap-4">
-                        <button onclick="copyHooks()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-copy mr-2"></i>Copy All Hooks
-                        </button>
-                    </div>
-                </div>
             </div>
 
-            <!-- TOOL 4: Caption & Hashtag Generator -->
-            <div id="tool-caption" class="tool-content hidden">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Caption & Hashtag Generator</h2>
-                    <p class="text-slate-400">Viral captions and optimized hashtags for all platforms.</p>
+            <!-- Affiliate Form -->
+            <div class="glass-card p-6 shadow-xl">
+                <div class="flex items-center gap-2 mb-6 border-b border-zinc-800 pb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 15 2 2 4-4"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    <h2 class="text-xl font-bold">Affiliate Script Generator</h2>
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-4 mb-8">
-                    <input type="text" id="cap-topic" placeholder="Masukkan Topik atau Produk..." class="flex-1 p-4 rounded-xl text-lg">
-                    <button onclick="generateCaption()" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold flex items-center transition-all justify-center">
-                        <span id="cap-btn-text">Generate Caption</span>
-                        <div id="cap-loader" class="loader ml-3"></div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Product Name</label>
+                        <input id="a-name" type="text" placeholder="E.g. TWS Noise Cancelling" class="w-full mt-1 p-3 input-field rounded-lg">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-zinc-500 uppercase">Key Benefits</label>
+                        <textarea id="a-benefit" rows="2" placeholder="Battery 40H, Bass Boost, waterproof..." class="w-full mt-1 p-3 input-field rounded-lg"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-medium text-zinc-500 uppercase">Price</label>
+                            <input id="a-price" type="text" placeholder="99rb" class="w-full mt-1 p-3 input-field rounded-lg">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-zinc-500 uppercase">Target Market</label>
+                            <input id="a-market" type="text" placeholder="Gamer, Mahasiswa" class="w-full mt-1 p-3 input-field rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-2">
+                    <button onclick="generateAffiliateScript()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-emerald-900/20">
+                        Generate Script
+                    </button>
+                    <button onclick="clearForm('affiliate')" class="bg-zinc-800 hover:bg-zinc-700 px-4 rounded-lg transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                     </button>
                 </div>
+            </div>
+        </div>
 
-                <div class="mt-4">
-                    <textarea id="cap-output" class="w-full h-80 rounded-2xl p-6 custom-scrollbar text-sm font-mono leading-relaxed" readonly placeholder="Captions and hashtags will appear here..."></textarea>
-                    <div class="flex gap-4 mt-4">
-                        <button onclick="copyToClipboard('cap-output')" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-medium transition-all">
-                            <i class="fas fa-copy mr-2"></i>Copy Content
-                        </button>
+        <!-- Right Column: Output Panels -->
+        <div class="lg:col-span-7">
+            <div class="glass-card flex flex-col h-full overflow-hidden shadow-2xl">
+                <!-- Tab Headers -->
+                <div class="flex border-b border-zinc-800 bg-zinc-900/50">
+                    <button onclick="switchTab('tab-prompt')" id="btn-tab-prompt" class="px-6 py-4 text-sm font-medium transition tab-active">Cinematic Prompt</button>
+                    <button onclick="switchTab('tab-json')" id="btn-tab-json" class="px-6 py-4 text-sm font-medium transition text-zinc-500 hover:text-zinc-300">JSON Data</button>
+                    <button onclick="switchTab('tab-script')" id="btn-tab-script" class="px-6 py-4 text-sm font-medium transition text-zinc-500 hover:text-zinc-300">Affiliate Script</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6 flex-grow flex flex-col min-h-[500px]">
+                    
+                    <!-- Tab 1: Cinematic Prompt -->
+                    <div id="tab-prompt" class="tab-content flex-grow flex flex-col space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-zinc-400 text-xs font-bold uppercase tracking-widest">Output: Video Prompt Text</h3>
+                            <button onclick="copyToClipboard('out-prompt')" class="text-xs bg-zinc-800 hover:bg-zinc-700 py-1 px-3 rounded flex items-center gap-1 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                Copy Prompt
+                            </button>
+                        </div>
+                        <div id="out-prompt" class="flex-grow p-4 rounded-lg bg-black/40 border border-zinc-800 text-zinc-300 text-sm leading-relaxed overflow-y-auto custom-scrollbar italic whitespace-pre-wrap">
+Prompt will appear here...
+                        </div>
                     </div>
+
+                    <!-- Tab 2: JSON -->
+                    <div id="tab-json" class="tab-content hidden flex-grow flex flex-col space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-zinc-400 text-xs font-bold uppercase tracking-widest">Output: Video JSON Payload</h3>
+                            <button onclick="copyToClipboard('out-json')" class="text-xs bg-zinc-800 hover:bg-zinc-700 py-1 px-3 rounded flex items-center gap-1 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                Copy JSON
+                            </button>
+                        </div>
+                        <pre id="out-json" class="flex-grow p-4 rounded-lg bg-black/40 border border-zinc-800 text-emerald-400 text-xs font-mono overflow-y-auto custom-scrollbar">
+{
+  "status": "waiting_for_input"
+}
+                        </pre>
+                    </div>
+
+                    <!-- Tab 3: Affiliate Script -->
+                    <div id="tab-script" class="tab-content hidden flex-grow flex flex-col space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-zinc-400 text-xs font-bold uppercase tracking-widest">Output: Viral Marketing Script</h3>
+                            <button onclick="copyToClipboard('out-script')" class="text-xs bg-zinc-800 hover:bg-zinc-700 py-1 px-3 rounded flex items-center gap-1 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                Copy Script
+                            </button>
+                        </div>
+                        <div id="out-script" class="flex-grow p-4 rounded-lg bg-black/40 border border-zinc-800 text-zinc-300 text-sm overflow-y-auto custom-scrollbar space-y-6">
+Script will appear here...
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons for Output -->
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <button onclick="copyAllOutputs()" class="bg-violet-600/20 text-violet-400 hover:bg-violet-600/30 border border-violet-600/50 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition">
+                            Copy All Generated Content
+                        </button>
+                        <div id="copy-feedback" class="text-emerald-400 text-sm opacity-0 transition-opacity flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                            Copied!
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="mt-20 py-8 border-t border-slate-800 text-center text-slate-500 text-sm">
-        <p>&copy; 2026 Ghany Media Tools. All Rights Reserved.</p>
+    <footer class="max-w-7xl mx-auto mt-12 mb-8 text-center text-zinc-600 text-sm">
+        <p>Powered by Ghany Media &bull; Professional AI Suite 2024</p>
     </footer>
 
-    <!-- Notification -->
-    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-2xl transition-all opacity-0 translate-y-10 pointer-events-none z-50">
-        Copied to clipboard!
-    </div>
-
     <script>
-        // Initialize Scene Inputs
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('scene-container');
-            for (let i = 1; i <= 5; i++) {
-                container.innerHTML += `
-                    <div class="glass-card p-5 rounded-2xl">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs">${i}</span>
-                            <h3 class="font-bold">SCENE ${i}</h3>
-                        </div>
-                        <div class="space-y-3">
-                            <input type="text" id="s${i}-title" placeholder="Scene Title" class="w-full p-2 text-xs rounded-lg">
-                            <textarea id="s${i}-desc" placeholder="Brief Description" class="w-full p-2 text-xs rounded-lg h-16"></textarea>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="text" id="s${i}-char" placeholder="Character" class="w-full p-2 text-xs rounded-lg">
-                                <input type="text" id="s${i}-env" placeholder="Environment" class="w-full p-2 text-xs rounded-lg">
-                                <input type="text" id="s${i}-cam" placeholder="Camera Movement" class="w-full p-2 text-xs rounded-lg">
-                                <input type="text" id="s${i}-light" placeholder="Lighting" class="w-full p-2 text-xs rounded-lg">
-                                <input type="text" id="s${i}-mood" placeholder="Mood" class="w-full p-2 text-xs rounded-lg">
-                                <input type="text" id="s${i}-dialog" placeholder="Dialogue" class="w-full p-2 text-xs rounded-lg">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-        });
-
-        // Navigation
+        // Tab System
         function switchTab(tabId) {
-            document.querySelectorAll('.tool-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('tool-' + tabId).classList.remove('hidden');
-            
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
-            document.getElementById('tab-' + tabId).classList.add('tab-active');
-        }
-
-        // TOOL 1: Scene Generation Logic
-        function generateScenePrompt() {
-            showLoader('scene');
-            
-            setTimeout(() => {
-                let finalPrompt = `GHANY MEDIA ULTIMATE CINEMATIC AI VIDEO PROMPT\n`;
-                finalPrompt += `===============================================\n\n`;
-
-                for (let i = 1; i <= 5; i++) {
-                    const title = document.getElementById(`s${i}-title`).value || `Untitled Scene ${i}`;
-                    const desc = document.getElementById(`s${i}-desc`).value || "N/A";
-                    const char = document.getElementById(`s${i}-char`).value || "N/A";
-                    const env = document.getElementById(`s${i}-env`).value || "N/A";
-                    const cam = document.getElementById(`s${i}-cam`).value || "N/A";
-                    const light = document.getElementById(`s${i}-light`).value || "N/A";
-                    const mood = document.getElementById(`s${i}-mood`).value || "N/A";
-                    const dialog = document.getElementById(`s${i}-dialog`).value || "N/A";
-
-                    finalPrompt += `SCENE ${i}\n`;
-                    finalPrompt += `Title: ${title}\n`;
-                    finalPrompt += `Description: ${desc}\n`;
-                    finalPrompt += `Character: ${char}\n`;
-                    finalPrompt += `Environment: ${env}\n`;
-                    finalPrompt += `Camera Movement: ${cam}\n`;
-                    finalPrompt += `Lighting: ${light}\n`;
-                    finalPrompt += `Mood: ${mood}\n`;
-                    finalPrompt += `Dialogue: "${dialog}"\n\n`;
-                }
-
-                document.getElementById('scene-output').value = finalPrompt;
-                hideLoader('scene');
-            }, 800);
-        }
-
-        function clearScenes() {
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`s${i}-title`).value = "";
-                document.getElementById(`s${i}-desc`).value = "";
-                document.getElementById(`s${i}-char`).value = "";
-                document.getElementById(`s${i}-env`).value = "";
-                document.getElementById(`s${i}-cam`).value = "";
-                document.getElementById(`s${i}-light`).value = "";
-                document.getElementById(`s${i}-mood`).value = "";
-                document.getElementById(`s${i}-dialog`).value = "";
-            }
-            document.getElementById('scene-output').value = "";
-        }
-
-        // TOOL 2: Affiliate Generation Logic
-        function generateAffiliateScript() {
-            const product = document.getElementById('aff-product').value || "[Nama Produk]";
-            const category = document.getElementById('aff-category').value || "[Kategori]";
-            const price = document.getElementById('aff-price').value || "[Harga]";
-            const benefits = document.getElementById('aff-benefits').value || "[Manfaat]";
-            const target = document.getElementById('aff-target').value || "[Target Audience]";
-            const platform = document.getElementById('aff-platform').value;
-
-            showLoader('aff');
-
-            setTimeout(() => {
-                let script = `AFFILIATE VIDEO SCRIPT - ${platform.toUpperCase()}\n`;
-                script += `Target: ${target} | Kategori: ${category}\n`;
-                script += `===============================================\n\n`;
-                
-                script += `HOOK PEMBUKA (0-3 Detik):\n`;
-                script += `"Jangan scroll dulu kalau kamu ${target} dan lagi nyari ${category} yang harganya cuma ${price} tapi kualitasnya gila banget!"\n\n`;
-
-                script += `SCENE 1: MASALAH\n`;
-                script += `(Visual: Orang terlihat bingung/kesal dengan produk lama yang rusak/jelek)\n`;
-                script += `"Jujur capek banget nggak sih kalau harus ngadepin masalah kayak gini terus?"\n\n`;
-
-                script += `SCENE 2: PERKENALAN PRODUK\n`;
-                script += `(Visual: Close up produk ${product} yang terlihat estetik)\n`;
-                script += `"Nah, ini dia solusinya! Kenalin ${product}. Barang yang lagi viral banget dan wajib kalian punya."\n\n`;
-
-                script += `SCENE 3: MANFAAT PRODUK\n`;
-                script += `(Visual: Menunjukkan fitur utama satu per satu)\n`;
-                script += `"Kenapa harus punya ini? Karena ini ${benefits}. Bener-bener ngebantu banget buat kegiatan sehari-hari."\n\n`;
-
-                script += `SCENE 4: DEMONSTRASI\n`;
-                script += `(Visual: Penggunaan produk secara nyata dan hasilnya memuaskan)\n`;
-                script += `"Lihat sendiri kan hasilnya? Gak cuma fungsional, tapi desainnya juga cakep banget buat dibawa kemana-mana."\n\n`;
-
-                script += `SCENE 5: CALL TO ACTION\n`;
-                script += `(Visual: Menunjuk ke arah keranjang kuning atau link di bio)\n`;
-                script += `"Mumpung lagi promo dan stoknya terbatas, buruan cek keranjang kuning sekarang sebelum kehabisan!"\n\n`;
-
-                script += `CAPTION VIRAL:\n`;
-                script += `Akhirnya nemu juga ${product} yang kualitasnya premium tapi harga miring! 😍 Wajib banget masuk wishlist kalian sih ini. Checkout sekarang sebelum harganya balik normal! 👇\n\n`;
-
-                script += `10 HASHTAG VIRAL:\n`;
-                script += `#${product.replace(/\s+/g, '')} #affiliate${platform.replace(/\s+/g, '')} #racunshopee #barangunik #rekomendasiproduk #viralindonesia #fyp #murahlebay #shoppinghaul #racuntiktok`;
-
-                document.getElementById('aff-output').value = script;
-                hideLoader('aff');
-            }, 1000);
-        }
-
-        // TOOL 3: Viral Hook Logic
-        function generateHooks() {
-            const topic = document.getElementById('hook-topic').value || "Produk ini";
-            showLoader('hook');
-
-            setTimeout(() => {
-                const hooks = [
-                    `Jangan scroll dulu kalau kamu punya masalah sama ${topic}...`,
-                    `${topic} ini lagi viral banget di TikTok, ternyata ini rahasianya!`,
-                    `Gue baru nemu barang murah tapi kualitas ${topic} ini gila banget...`,
-                    `Kalau kamu sering ngalamin ini, wajib lihat video ${topic} ini sampai habis.`,
-                    `Baru tau ternyata ada alat sekeren ${topic} ini!`,
-                    `Stop beli ${topic} sebelum kamu nonton video ini, jangan sampai nyesel!`,
-                    `Pantesan ${topic} ini sold out terus, ternyata beneran sebagus itu...`,
-                    `Cara rahasia biar kamu gak ribet lagi pake ${topic}.`,
-                    `3 Alasan kenapa kamu butuh ${topic} ini di tahun 2026.`,
-                    `Awalnya iseng beli ${topic} ini, eh malah ketagihan pakenya!`
-                ];
-
-                const container = document.getElementById('hook-list');
-                container.innerHTML = '';
-                hooks.forEach((hook, index) => {
-                    container.innerHTML += `
-                        <div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 flex justify-between items-center group">
-                            <span class="text-sm md:text-base">${index + 1}. ${hook}</span>
-                            <button onclick="copyIndividualHook('${hook}')" class="text-blue-400 opacity-0 group-hover:opacity-100 transition-all hover:text-white">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
-                    `;
-                });
-
-                document.getElementById('hook-result-container').classList.remove('hidden');
-                hideLoader('hook');
-            }, 600);
-        }
-
-        function copyHooks() {
-            let allHooks = "";
-            document.querySelectorAll('#hook-list span').forEach(el => {
-                allHooks += el.innerText + "\n";
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="btn-tab-"]').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-zinc-500');
             });
-            copyTextToClipboard(allHooks);
+
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('animate-fade');
+            document.getElementById('btn-' + tabId).classList.add('tab-active');
+            document.getElementById('btn-' + tabId).classList.remove('text-zinc-500');
         }
 
-        function copyIndividualHook(text) {
-            copyTextToClipboard(text);
-        }
+        // Logic for Video Prompt
+        function generateVideoPrompt() {
+            const title = document.getElementById('v-title').value || "Untitled Scene";
+            const character = document.getElementById('v-char').value || "a person";
+            const location = document.getElementById('v-location').value || "a beautiful setting";
+            const activity = document.getElementById('v-activity').value || "interacting with the environment";
+            const dialog = document.getElementById('v-dialog').value || "";
+            const emotion = document.getElementById('v-emotion').value;
+            const style = document.getElementById('v-style').value;
+            const camera = document.getElementById('v-camera').value;
+            const lighting = document.getElementById('v-lighting').value;
+            const time = document.getElementById('v-time').value;
+            const ratio = document.getElementById('v-ratio').value;
+            const lang = document.getElementById('v-lang').value;
 
-        // TOOL 4: Caption Logic
-        function generateCaption() {
-            const topic = document.getElementById('cap-topic').value || "Produk";
-            showLoader('cap');
+            // Realism Engine Mandatories
+            const engineDetail = "ultra realistic human movement, natural facial expressions, realistic body physics, detailed skin texture, natural blinking and breathing, cinematic lighting, volumetric light, real-world environment details, depth of field, subtle camera shake, film color grading, ambient environmental sounds, natural character interaction with environment";
+            const cinematicDetail = "shot with 50mm cinematic lens, soft focus background, natural shadow and highlight contrast, micro facial expression, realistic cloth movement, wind interaction with environment";
 
-            setTimeout(() => {
-                let output = `CAPTION VIRAL:\n`;
-                output += `Siapa yang dari kemarin nanyain ${topic} ini? 😍 Akhirnya ready stock lagi guys! Jujur ini worth it banget buat kalian yang pengen tampil kece tapi tetep budget-friendly. Bener-bener definisi ada harga ada rupa, tapi yang ini harganya terlalu murah buat kualitas sekeren ini! ✨\n\n`;
-                output += `Klik link di bio / keranjang kuning sekarang! 🛒\n\n`;
-                
-                output += `TIKTOK HASHTAGS:\n`;
-                output += `#${topic.replace(/\s+/g, '')} #racuntiktok #fyp #viral #trending #xyzbca #affiliate #shop #musthave #ootd\n\n`;
-
-                output += `SHOPEE AFFILIATE HASHTAGS:\n`;
-                output += `#shopeehaul #racunshopee #shopeeid #shopeefeed #shopeevideo #affiliateshopee #spaylater #murah #diskon #shopeecheck\n\n`;
-
-                output += `IG REELS HASHTAGS:\n`;
-                output += `#reelsinstagram #viralreels #reelsviral #explorepage #instadaily #trendingnow #shoppingonline #lifestyle #indonesia #${topic.replace(/\s+/g, '')}reels`;
-
-                document.getElementById('cap-output').value = output;
-                hideLoader('cap');
-            }, 800);
-        }
-
-        // Helpers
-        function showLoader(id) {
-            document.getElementById(id + '-btn-text').style.opacity = '0.5';
-            document.getElementById(id + '-loader').style.display = 'block';
-        }
-
-        function hideLoader(id) {
-            document.getElementById(id + '-btn-text').style.opacity = '1';
-            document.getElementById(id + '-loader').style.display = 'none';
-        }
-
-        function copyToClipboard(id) {
-            const text = document.getElementById(id).value;
-            copyTextToClipboard(text);
-        }
-
-        function copyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
+            // Paragraph Construction (Always English)
+            let promptText = `A ${style} of ${title}. ${character}, ${emotion}, is ${activity} at ${location} ${time}. `;
+            promptText += `Captured with a ${camera} using a cinematic 50mm lens. `;
+            promptText += `The scene features ${lighting} creating a high-end visual atmosphere. `;
+            promptText += `Visual details include ${engineDetail}, ensuring ${cinematicDetail}. `;
+            promptText += `The environment is filled with realistic ambient sounds and subtle natural movements. `;
             
-            showToast();
+            if (dialog) {
+                promptText += `\n\n${character} says in ${lang}:\n"${dialog}"`;
+            }
+
+            document.getElementById('out-prompt').innerText = promptText;
+
+            // JSON Construction
+            const jsonOutput = {
+                "title": title,
+                "scene_description": `Ultra realistic ${style} video of ${character} at ${location}`,
+                "character": character,
+                "emotion": emotion,
+                "location": location,
+                "action": activity,
+                "dialogue": dialog,
+                "dialogue_language": lang,
+                "camera": {
+                    "movement": camera,
+                    "lens": "cinematic 50mm lens",
+                    "depth_of_field": "shallow depth of field"
+                },
+                "lighting": lighting,
+                "time_of_day": time,
+                "visual_style": `ultra realistic ${style} video`,
+                "motion": "natural human body movement with realistic physics",
+                "details": engineDetail + ", " + cinematicDetail,
+                "audio": {
+                    "voice": "natural human voice",
+                    "language": lang,
+                    "ambient_sound": "realistic environmental ambience"
+                },
+                "color_grading": "cinematic film color grading",
+                "duration": "10s",
+                "aspect_ratio": ratio
+            };
+
+            document.getElementById('out-json').innerText = JSON.stringify(jsonOutput, null, 2);
+            
+            switchTab('tab-prompt');
         }
 
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.remove('opacity-0', 'translate-y-10');
-            toast.classList.add('opacity-100', 'translate-y-0');
+        // Logic for Affiliate Script
+        function generateAffiliateScript() {
+            const pName = document.getElementById('a-name').value || "Produk Viral";
+            const pBenefit = document.getElementById('a-benefit').value || "Kualitas premium dan harga terjangkau";
+            const pPrice = document.getElementById('a-price').value || "Murah";
+            const pMarket = document.getElementById('a-market').value || "kalian semua";
+
+            // Hook Templates
+            const hooks = [
+                `Gak nyangka banget nemu ${pName} sekeren ini cuma harga ${pPrice}!`,
+                `Stop scrolling! Ini dia rahasia ${pMarket} biar makin produktif.`,
+                `Jangan beli ${pName} sebelum liat video ini sampai habis!`,
+                `Kenapa baru tau ada ${pName} yang fiturnya selengkap ini?`,
+                `Spill produk yang lagi viral banget, ${pName} harganya cuma ${pPrice}!`
+            ];
+
+            let script = `<div class="p-4 border-l-4 border-violet-500 bg-zinc-900 mb-4"><strong class="text-violet-400">🔥 5 VIRAL HOOKS:</strong><ul class="list-disc ml-5 mt-2 space-y-1">`;
+            hooks.forEach(h => script += `<li>${h}</li>`);
+            script += `</ul></div>`;
+
+            script += `
+            <div class="space-y-4">
+                <p><strong>🪝 HOOK VIRAL</strong><br><em>${hooks[0]}</em></p>
+                <p><strong>⚠️ PROBLEM</strong><br>Sering banget kan kita ngerasa repot kalo harus cari produk yang awet tapi budget terbatas? Apalagi buat ${pMarket} yang mobilitasnya tinggi.</p>
+                <p><strong>💡 SOLUTION</strong><br>Nah, ${pName} ini hadir buat nyelesain masalah itu. Akhirnya ada solusi praktis yang gak bikin kantong bolong.</p>
+                <p><strong>📦 PRODUCT SELLING</strong><br>Liat deh detailnya, dia punya ${pBenefit}. Dengan harga cuma ${pPrice}, ini sih worth it banget!</p>
+                <p><strong>🎯 CALL TO ACTION</strong><br>Mumpung lagi promo dan stok terbatas, langsung aja klik keranjang kuning atau link di bio sekarang!</p>
+            </div>`;
+
+            document.getElementById('out-script').innerHTML = script;
+            switchTab('tab-script');
+        }
+
+        // Clipboard Function
+        function copyToClipboard(elementId) {
+            const content = document.getElementById(elementId).innerText || document.getElementById(elementId).textContent;
+            
+            const temp = document.createElement('textarea');
+            temp.value = content;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            showFeedback();
+        }
+
+        function copyAllOutputs() {
+            const prompt = document.getElementById('out-prompt').innerText;
+            const json = document.getElementById('out-json').innerText;
+            const script = document.getElementById('out-script').innerText;
+            
+            const combined = `--- CINEMATIC PROMPT ---\n${prompt}\n\n--- JSON DATA ---\n${json}\n\n--- AFFILIATE SCRIPT ---\n${script}`;
+            
+            const temp = document.createElement('textarea');
+            temp.value = combined;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            showFeedback();
+        }
+
+        function showFeedback() {
+            const feedback = document.getElementById('copy-feedback');
+            feedback.style.opacity = '1';
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-10');
-                toast.classList.remove('opacity-100', 'translate-y-0');
+                feedback.style.opacity = '0';
             }, 2000);
         }
 
-        function downloadTxt(id, filename) {
-            const text = document.getElementById(id).value;
-            if(!text) return;
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
+        function clearForm(type) {
+            if (type === 'video') {
+                document.querySelectorAll('#video-form input, #video-form textarea').forEach(i => i.value = '');
+                document.getElementById('out-prompt').innerText = 'Prompt will appear here...';
+                document.getElementById('out-json').innerText = '{\n  "status": "cleared"\n}';
+            } else {
+                document.querySelectorAll('#affiliate-form input, #affiliate-form textarea').forEach(i => i.value = '');
+                document.getElementById('out-script').innerText = 'Script will appear here...';
+            }
         }
     </script>
 </body>
-                  </html>
+    </html>
